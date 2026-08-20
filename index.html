@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TermMax × Pharos × SharpByte — SharpByte Pharos Prime Factsheet</title>
+<style>
+  :root{
+    --bg:#0A0D12;
+    --panel:#12161D;
+    --panel-alt:#181D26;
+    --line:#252C38;
+    --line-soft:#1B212B;
+    --text:#EAEDF2;
+    --muted:#8891A3;
+    --muted-dim:#5D6577;
+    --amber:#F0A93E;
+    --amber-dim:#7A5A22;
+    --teal:#2E9C93;
+    --teal-dim:#173B38;
+    --rust:#C15A3C;
+    --rust-dim:#3A231C;
+    --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+    --sans: -apple-system, "Helvetica Neue", Helvetica, Arial, "PingFang TC", "Microsoft JhengHei", sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1200px 600px at 85% -10%, rgba(240,169,62,0.06), transparent 60%),
+      radial-gradient(900px 500px at -10% 20%, rgba(46,156,147,0.07), transparent 55%),
+      var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
+
+  /* ---------- topbar ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:50;
+    background:rgba(10,13,18,0.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line-soft);
+  }
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:58px;}
+  .brandmark{
+    font-family:var(--mono); font-size:12.5px; letter-spacing:.04em;
+    color:var(--muted); display:flex; gap:8px; align-items:center;
+  }
+  .brandmark b{color:var(--text); font-weight:600;}
+  .brandmark .x{color:var(--amber);}
+  .navlinks{display:flex; gap:22px; font-family:var(--mono); font-size:12px; letter-spacing:.03em;}
+  .navlinks a{color:var(--muted); text-decoration:none; padding:4px 0; border-bottom:1px solid transparent;}
+  .navlinks a:hover{color:var(--amber); border-color:var(--amber-dim);}
+  .draftbadge{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.08em;
+    color:var(--rust); border:1px solid var(--rust-dim); background:rgba(193,90,60,0.08);
+    padding:3px 9px; border-radius:3px; text-transform:uppercase;
+  }
+  @media (max-width: 880px){ .navlinks{display:none;} }
+
+  /* ---------- hero ---------- */
+  .hero{padding:64px 0 40px; border-bottom:1px solid var(--line-soft);}
+  .eyebrow{
+    font-family:var(--mono); font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--teal); margin-bottom:18px; display:flex; gap:10px; align-items:center;
+  }
+  .eyebrow::before{content:"";width:22px;height:1px;background:var(--teal);display:inline-block;}
+  h1.title{
+    font-size:clamp(30px,4.6vw,50px); line-height:1.1; margin:0 0 18px; font-weight:700;
+    letter-spacing:-0.015em;
+  }
+  h1.title .ticker{
+    font-family:var(--mono); font-weight:600; color:var(--amber);
+    background:rgba(240,169,62,0.08); border:1px solid var(--amber-dim);
+    padding:2px 10px; border-radius:4px; font-size:0.5em; vertical-align:middle; margin-left:12px;
+    white-space:nowrap;
+  }
+  .hero-sub{max-width:680px; color:var(--muted); font-size:16.5px; line-height:1.65; margin-bottom:28px;}
+  .hero-chips{display:flex; flex-wrap:wrap; gap:10px;}
+  .chip{
+    font-family:var(--mono); font-size:12.5px; color:var(--text);
+    background:var(--panel); border:1px solid var(--line); border-radius:20px;
+    padding:7px 14px; display:flex; gap:7px; align-items:center;
+  }
+  .chip .k{color:var(--muted-dim);}
+  .chip .v{color:var(--amber); font-weight:600;}
+
+  /* ---------- section shell ---------- */
+  section.block{padding:56px 0; border-bottom:1px solid var(--line-soft);}
+  .section-head{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:28px; gap:16px; flex-wrap:wrap;}
+  .section-num{font-family:var(--mono); color:var(--muted-dim); font-size:13px;}
+  h2.h{
+    font-size:24px; margin:2px 0 0; font-weight:700; letter-spacing:-0.01em;
+    display:flex; align-items:baseline; gap:10px;
+  }
+  h2.h .num{font-family:var(--mono); font-size:14px; color:var(--teal); font-weight:600;}
+  p.lead{color:var(--muted); font-size:14.5px; max-width:720px; margin:10px 0 0;}
+
+  /* ---------- summary grid ---------- */
+  .summary-grid{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:1px;
+    background:var(--line); border:1px solid var(--line); border-radius:8px; overflow:hidden;
+  }
+  .summary-cell{background:var(--panel); padding:18px 20px;}
+  .summary-cell.wide{grid-column:span 2;}
+  @media (max-width:640px){ .summary-cell.wide{grid-column:span 1;} }
+  .summary-cell .lbl{font-family:var(--mono); font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted-dim); margin-bottom:8px;}
+  .summary-cell .val{font-size:16.5px; font-weight:600; color:var(--text);}
+  .summary-cell .val.amber{color:var(--amber); font-family:var(--mono);}
+  .summary-cell .val small{display:block; font-family:var(--sans); font-weight:400; font-size:12px; color:var(--muted); margin-top:4px;}
+  .apy-lines{display:flex; flex-direction:column; gap:6px; font-size:13px;}
+  .apy-lines .row{display:flex; justify-content:space-between; gap:12px; font-family:var(--mono); font-size:12.5px;}
+  .apy-lines .row .k2{color:var(--muted);}
+  .apy-lines .row .v2{color:var(--amber);}
+
+  /* ---------- flow diagram ---------- */
+  .flow-tabs{display:flex; gap:8px; margin-bottom:20px;}
+  .flow-tab{
+    font-family:var(--mono); font-size:12.5px; padding:8px 16px; border-radius:6px;
+    border:1px solid var(--line); background:var(--panel); color:var(--muted); cursor:pointer;
+  }
+  .flow-tab.active{background:var(--teal-dim); border-color:var(--teal); color:#BEEAE5;}
+  .flow-panel{display:none;}
+  .flow-panel.active{display:block;}
+  .flow-col{display:flex; flex-direction:column; align-items:stretch; max-width:640px;}
+  .flow-node{
+    background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:16px 18px;
+  }
+  .flow-node .ftitle{font-weight:700; font-size:14.5px; margin-bottom:4px;}
+  .flow-node .fmeta{font-family:var(--mono); font-size:12px; color:var(--muted); line-height:1.7;}
+  .flow-node.vault{border-color:var(--teal-dim); background:linear-gradient(180deg,rgba(46,156,147,0.07),transparent);}
+  .flow-node.market{border-left:3px solid var(--amber); margin-left:22px;}
+  .flow-node.borrower{border-left:3px solid var(--rust); margin-left:22px;}
+  .flow-arrow{
+    font-family:var(--mono); color:var(--muted-dim); text-align:center; font-size:13px;
+    padding:6px 0; margin-left:22px;
+  }
+  .flow-expiry{
+    display:inline-block; margin-top:8px; font-family:var(--mono); font-size:11px;
+    color:var(--amber); background:rgba(240,169,62,0.08); border:1px solid var(--amber-dim);
+    padding:2px 8px; border-radius:3px;
+  }
+  .flow-note{
+    margin-top:16px; margin-left:22px; font-size:13px; color:var(--muted); max-width:560px;
+    border-left:2px solid var(--line); padding-left:14px;
+  }
+
+  /* ---------- tables ---------- */
+  table.ledger{width:100%; border-collapse:collapse; font-size:13.5px;}
+  table.ledger th{
+    text-align:left; font-family:var(--mono); font-size:11px; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--muted-dim); font-weight:500; padding:10px 14px; border-bottom:1px solid var(--line);
+  }
+  table.ledger td{padding:12px 14px; border-bottom:1px solid var(--line-soft); vertical-align:top; color:var(--text);}
+  table.ledger tr:last-child td{border-bottom:1px solid var(--line);}
+  table.ledger tbody tr:hover{background:var(--panel-alt);}
+  table.ledger td.num, table.ledger th.num{font-family:var(--mono); text-align:right;}
+  table.ledger .tag{font-family:var(--mono); font-size:11px; color:var(--amber);}
+  .table-wrap{background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden;}
+  .table-wrap.scroll{overflow-x:auto;}
+  .table-title{
+    font-family:var(--mono); font-size:12px; letter-spacing:.04em; color:var(--muted);
+    padding:14px 16px; border-bottom:1px solid var(--line); background:var(--panel-alt);
+  }
+  .highlight-row td{background:rgba(240,169,62,0.05); font-weight:600;}
+
+  /* ---------- two-col cards ---------- */
+  .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:20px;}
+  @media (max-width:880px){ .grid-2{grid-template-columns:1fr;} }
+  .asset-card{background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden;}
+  .asset-card .ahead{
+    padding:16px 18px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center;
+    background:var(--panel-alt);
+  }
+  .asset-card .ahead h3{margin:0; font-size:16px;}
+  .asset-card .apy{font-family:var(--mono); color:var(--teal); font-size:13px;}
+  .asset-card table.ledger td, .asset-card table.ledger th{padding:9px 18px; font-size:12.8px;}
+  .asset-card table.ledger td:first-child{color:var(--muted); width:38%;}
+  .asset-card a.addr{color:var(--teal); font-family:var(--mono); font-size:11.5px; word-break:break-all;}
+
+  /* ---------- formula box ---------- */
+  .formula-box{
+    display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+    background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:20px 22px; margin-bottom:24px;
+    font-family:var(--mono); font-size:14px;
+  }
+  .formula-box .f-step{color:var(--muted);}
+  .formula-box .f-op{color:var(--muted-dim);}
+  .formula-box .f-result{
+    color:var(--amber); font-weight:700; font-size:17px; margin-left:auto;
+    background:rgba(240,169,62,0.09); border:1px solid var(--amber-dim); padding:5px 12px; border-radius:5px;
+  }
+  @media (max-width:640px){ .formula-box .f-result{margin-left:0;} }
+
+  .apy-stack{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:28px;}
+  @media (max-width:760px){ .apy-stack{grid-template-columns:1fr;} }
+  .apy-card{background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:18px 20px;}
+  .apy-card .atitle{font-family:var(--mono); font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:var(--muted-dim); margin-bottom:10px;}
+  .apy-card .aformula{font-size:13.5px; color:var(--text); line-height:1.6;}
+  .apy-card .aformula b{color:var(--amber); font-family:var(--mono);}
+  .apy-card.passive{border-color:var(--teal-dim);}
+  .apy-card.passive .atitle{color:var(--teal);}
+
+  /* ---------- risk ---------- */
+  .risk-row .rname{font-weight:600; display:flex; align-items:center; gap:8px;}
+  .risk-crit{color:var(--rust); font-family:var(--mono); font-size:10.5px; border:1px solid var(--rust-dim); background:rgba(193,90,60,0.1); padding:1px 7px; border-radius:3px;}
+
+  /* ---------- footer ---------- */
+  footer{padding:44px 0 60px;}
+  .parties{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:36px;}
+  @media (max-width:760px){ .parties{grid-template-columns:1fr;} }
+  .party{background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:18px 20px;}
+  .party h4{margin:0 0 6px; font-size:14.5px;}
+  .party p{margin:0; font-size:12.8px; color:var(--muted); line-height:1.6;}
+  .disclaimer{
+    font-family:var(--mono); font-size:11.5px; color:var(--muted-dim); line-height:1.8;
+    border-top:1px solid var(--line-soft); padding-top:24px;
+  }
+  .disclaimer strong{color:var(--muted);}
+
+  ::selection{background:var(--amber-dim); color:#fff;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <div class="brandmark"><b>TermMax</b><span class="x">×</span><b>Pharos</b><span class="x">×</span><b>SharpByte</b></div>
+    <div class="navlinks">
+      <a href="#overview">Overview</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#collateral">Collateral</a>
+      <a href="#glidepath">Glidepath</a>
+      <a href="#parameters">Parameters</a>
+    </div>
+  </div>
+</div>
+
+<div class="hero wrap">
+  <div class="eyebrow">Vault Intro · Pharos Network</div>
+  <h1 class="title">SharpByte Pharos Prime</h1>
+  <p class="hero-sub">
+    A USDC vault on Pharos Network, curated by SharpByte, supported by Termmax. Deposits are deployed
+    through TermMax's pALPHA and APC lending markets— real-world consumer-credit and treasury-backed
+    tokens issued by Axil / R25 and Ember vault — with idle capital routed to a passive RockawayX Morpho
+    USDC vault, on top of a $TMX + $PROS incentive campaign.
+  </p>
+  <div class="hero-chips">
+    <div class="chip"><span class="k">Network</span><span class="v">Pharos</span></div>
+    <div class="chip"><span class="k">Deposit</span><span class="v">USDC</span></div>
+    <div class="chip"><span class="k">Expected Yields</span><span class="v">Up to 23.5%</span></div>
+    <div class="chip"><span class="k">Campaign</span><span class="v">3 months</span></div>
+    <div class="chip"><span class="k">Curator</span><span class="v">SharpByte</span></div>
+  </div>
+</div>
+
+<!-- ================= OVERVIEW ================= -->
+<section class="block wrap" id="overview">
+  <div class="section-head">
+    <div>
+      <div class="section-num">§1</div>
+      <h2 class="h">Vault Summary</h2>
+    </div>
+  </div>
+
+  <div class="summary-grid">
+    <div class="summary-cell">
+      <div class="lbl">Market</div>
+      <div class="val" style="font-family:var(--mono); font-size:13.5px;">USDC/pALPHA<br>USDC/APC</div>
+    </div>
+    <div class="summary-cell"><div class="lbl">Borrow Rate</div><div class="val amber">6.00% <small>fixed, p.a.</small></div></div>
+    <div class="summary-cell"><div class="lbl">LTV / Liquidation LTV</div><div class="val amber">75% / 88%</div></div>
+    <div class="summary-cell"><div class="lbl">Vault Reserve</div><div class="val amber">5% <small>of TVL, held idle for instant redemptions</small></div></div>
+    <div class="summary-cell"><div class="lbl">Fee Structure</div><div class="val" style="font-size:13px;">Lender 2% · Borrow 13% · Performance 10%</div></div>
+    <div class="summary-cell"><div class="lbl">Net Base APY</div><div class="val amber">5.03% <small>at full utilization</small></div></div>
+    <div class="summary-cell"><div class="lbl">Campaign Duration</div><div class="val amber">3 months</div></div>
+    <div class="summary-cell"><div class="lbl">Total APY</div><div class="val amber">7.21%–23.5% <small>diluted by TVL</small></div></div>
+    <div class="summary-cell wide">
+      <div class="lbl">Incentive Model</div>
+      <div class="val" style="font-size:13px;">Pharos — $70,000 in $PROS &nbsp;·&nbsp; TermMax — $70,000 in $TMX @ $60M FDV</div>
+    </div>
+    <div class="summary-cell wide">
+      <div class="lbl">Total APY — Composition</div>
+      <div class="apy-lines">
+        <div class="row"><span class="k2">Active APY</span><span class="v2">Net Base APY × Utilization Rate</span></div>
+        <div class="row"><span class="k2">Passive APY</span><span class="v2">RockawayX Morpho USDC Vault — 8.50% (current)</span></div>
+        <div class="row"><span class="k2">Incentive APY</span><span class="v2">$PROS + $TMX rewards</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ARCHITECTURE ================= -->
+<section class="block wrap" id="architecture">
+  <div class="section-head">
+    <div>
+      <div class="section-num">§2.1</div>
+      <h2 class="h">Vault Architecture — Capital Flow</h2>
+      <p class="lead">USDC deposited into SharpByte Pharos Prime is routed by rate through two curated markets, each collateralized by a distinct receipt token.</p>
+    </div>
+  </div>
+
+  <div class="flow-tabs">
+    <button class="flow-tab active" onclick="showFlow('a')">Market A · USDC / APC</button>
+    <button class="flow-tab" onclick="showFlow('b')">Market B · USDC / pALPHA</button>
+  </div>
+
+  <div class="flow-panel active" id="flow-a">
+    <div class="flow-col">
+      <div class="flow-node"><div class="ftitle">USDC Depositors</div></div>
+      <div class="flow-arrow">↓ deposit</div>
+      <div class="flow-node vault">
+        <div class="ftitle">SharpByte Pharos Prime</div>
+        <div class="fmeta">Curator: TermMax · Open-ended · Range Order rate mechanism · 5% reserve (idle)</div>
+      </div>
+      <div class="flow-arrow">↓ 95% deployed</div>
+      <div class="flow-node market">
+        <div class="ftitle">Market A · USDC / APC</div>
+        <div class="fmeta">Market rate 6.0% · LTV 75% · Liq. 88%</div>
+        <span class="flow-expiry">Expiry · 2026-10-12</span>
+      </div>
+      <div class="flow-arrow">↓ borrow</div>
+      <div class="flow-node borrower">
+        <div class="ftitle">APC Borrowers</div>
+        <div class="fmeta">Deposit APC → borrow 75% LTV USDC<br>All-in borrow cost: 6.78% (6% × 1.13)</div>
+      </div>
+    </div>
+    <div class="flow-note">
+      Vault reserve note: the 5% reserve is managed at vault level and serves instant redemptions. If depleted,
+      redemption requests queue until the loan matures or new deposits arrive. No fixed waiting period is
+      guaranteed and no early-exit penalty applies.
+    </div>
+  </div>
+
+  <div class="flow-panel" id="flow-b">
+    <div class="flow-col">
+      <div class="flow-node"><div class="ftitle">USDC Depositors</div></div>
+      <div class="flow-arrow">↓ deposit</div>
+      <div class="flow-node vault">
+        <div class="ftitle">SharpByte Pharos Prime</div>
+        <div class="fmeta">Curator: SharpByte · Open-ended · Range Order rate mechanism · 5% reserve (idle)</div>
+      </div>
+      <div class="flow-arrow">↓ 95% deployed</div>
+      <div class="flow-node market">
+        <div class="ftitle">Market B · USDC / pALPHA</div>
+        <div class="fmeta">Market rate 6.0% · LTV 75% · Liq. 88%</div>
+        <span class="flow-expiry">Expiry · 2026-09-23</span>
+      </div>
+      <div class="flow-arrow">↓ borrow</div>
+      <div class="flow-node borrower">
+        <div class="ftitle">pALPHA Borrowers</div>
+        <div class="fmeta">Deposit pALPHA → borrow 75% LTV USDC<br>All-in borrow cost: 6.78% (6% × 1.13)</div>
+      </div>
+    </div>
+    <div class="flow-note">
+      Vault reserve note: the 5% reserve is managed at vault level and serves instant redemptions. If depleted,
+      redemption requests queue until the loan matures or new deposits arrive. No fixed waiting period is
+      guaranteed and no early-exit penalty applies.
+    </div>
+  </div>
+</section>
+
+<!-- ================= COLLATERAL ================= -->
+<section class="block wrap" id="collateral">
+  <div class="section-head">
+    <div>
+      <div class="section-num">§2.2</div>
+      <h2 class="h">Collateral Assets — APC &amp; pALPHA</h2>
+      <p class="lead">Both receipt tokens are RWA-backed, curated by Axil, with distinct redemption windows and interest-accrual cutoffs relative to each market's expiry.</p>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="asset-card">
+      <div class="ahead"><h3>APC</h3><span class="apy">13% net APY</span></div>
+      <table class="ledger">
+        <tbody>
+          <tr><td>Issuer / Manager</td><td>Axil (Risk Curator), R25</td></tr>
+          <tr><td>Underlying</td><td>Axil consumer credit</td></tr>
+          <tr><td>Asset Gross APY</td><td class="tag">14.3% p.a.</td></tr>
+          <tr><td>Asset Net APY</td><td class="tag">13% p.a.</td></tr>
+          <tr><td>Receipt Token</td><td>APC3M</td></tr>
+          <tr><td>Oracle</td><td>ERC-4626 convertToAssets — updates every block; stale → trading &amp; liquidations disabled</td></tr>
+          <tr><td>Interest Accrual</td><td>Accrues until 2026-10-20; TermMax expiry Oct 12 settles lenders before interest stops</td></tr>
+          <tr><td>Liquidation Method</td><td>Active Liquidators (if present); otherwise Physical Delivery</td></tr>
+          <tr><td>Custody / Audit</td><td>R25 contracts · Axil manages RWA pool · APEX provides proof of reserve</td></tr>
+          <tr><td>Contract</td><td><a class="addr" href="https://www.pharosscan.xyz/token/0xEC47E6f3EF1E7bc8e00F670aC3d5016798Fe44d0" target="_blank" rel="noopener">0xEC47E6f3EF1E7bc8e00F670aC3d5016798Fe44d0</a></td></tr>
+          <tr><td>Vault</td><td><a class="addr" href="https://app.r25.xyz/vaults/APC3M" target="_blank" rel="noopener">app.r25.xyz/vaults/APC3M</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="asset-card">
+      <div class="ahead"><h3>pALPHA</h3><span class="apy">14% fixed APY</span></div>
+      <table class="ledger">
+        <tbody>
+          <tr><td>Issuer / Manager</td><td>Axil (Risk Curator), Ember smart contracts</td></tr>
+          <tr><td>Underlying</td><td>~70% Axil consumer credit + ~30% Centrifuge JTRSY (short-duration US Treasuries)</td></tr>
+          <tr><td>Asset Gross APY</td><td class="tag">14% fixed (through 2026-10-20)</td></tr>
+          <tr><td>Receipt Token</td><td>pALPHA</td></tr>
+          <tr><td>Oracle</td><td>ERC-4626 convertToAssets — updates every block; stale → trading &amp; liquidations disabled</td></tr>
+          <tr><td>Interest Accrual</td><td>Accrues until 2026-10-20; TermMax expiry Nov 23 settles lenders before interest stops</td></tr>
+          <tr><td>Liquidation Method</td><td>Active Liquidators (if present); otherwise Physical Delivery</td></tr>
+          <tr><td>Custody / Audit</td><td>Ember contracts · Axil manages RWA pool</td></tr>
+          <tr><td>Contract</td><td><a class="addr" href="https://www.pharosscan.xyz/token/0xe47e9ba4ea2320a6ed87246d02fd5c38485ed7d1" target="_blank" rel="noopener">0xe47e9ba4ea2320a6ed87246d02fd5c38485ed7d1</a></td></tr>
+          <tr><td>Vault</td><td><a class="addr" href="https://ember.so/earn/pALPHA" target="_blank" rel="noopener">ember.so/earn/pALPHA</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FEES ================= -->
+<section class="block wrap" id="fees">
+  <div class="section-head">
+    <div>
+      <div class="section-num">§3</div>
+      <h2 class="h">Fee Structure</h2>
+    </div>
+  </div>
+  <div class="table-wrap scroll">
+    <table class="ledger">
+      <thead><tr><th>Fee</th><th>Rate</th><th>Paid By</th><th>Recipient</th><th>Effect</th></tr></thead>
+      <tbody>
+        <tr><td>TermMax Lender Fee</td><td class="num tag">2% of interest</td><td>Lender</td><td>TermMax protocol</td><td>Lender receives 98% of gross interest</td></tr>
+        <tr><td>TermMax Borrow Fee</td><td class="num tag">13% of interest</td><td>Borrower</td><td>TermMax protocol</td><td>Borrower all-in cost × 1.13</td></tr>
+        <tr><td>Performance Fee</td><td class="num tag">10% of gross lender yield</td><td>Lender</td><td>TermMax (as Curator)</td><td>Applied after Lender Fee</td></tr>
+        <tr class="highlight-row"><td>Net Multiplier</td><td class="num">(1&minus;2%)×(1&minus;10%) = 88.2%</td><td>—</td><td>—</td><td>Depositor net = market rate × 88.2%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ================= GLIDEPATH ================= -->
+<section class="block wrap" id="glidepath">
+  <div class="section-head">
+    <div>
+      <div class="section-num">§4</div>
+      <h2 class="h">Monthly Glidepath — Target TVL vs. Blended Yield</h2>
+      <p class="lead">The incentive pool is fixed ($135,800 net to users). Higher TVL means more depositors share the same pool, so incentive APY per depositor falls as TVL grows — base APY holds constant at full utilization since the 6% market rate is fixed.</p>
+    </div>
+  </div>
+
+  <div class="table-wrap scroll" style="margin-bottom:20px;">
+    <div class="table-title">Base APY 6% borrow rate, assuming 100% utilization · TMX priced at $60M FDV / $0.06 per TMX</div>
+    <table class="ledger">
+      <thead><tr><th>Month</th><th class="num">Target TVL</th><th class="num">Base APY</th><th class="num">Incentive APY</th><th class="num">Avg Total APY (TMX + PROS)</th><th class="num">Avg Total Net APY (−Merkl 3%)</th><th class="num">Passive APY</th></tr></thead>
+      <tbody>
+        <tr><td>Month 1</td><td class="num">1,500,000</td><td class="num">5.03%</td><td class="num">19.20%</td><td class="num">24.23%</td><td class="num tag">23.50%</td><td class="num">8.50%</td></tr>
+        <tr><td>Month 2</td><td class="num">3,000,000</td><td class="num">5.03%</td><td class="num">9.60%</td><td class="num">14.63%</td><td class="num tag">14.19%</td><td class="num">8.50%</td></tr>
+        <tr><td>Month 3</td><td class="num">5,000,000</td><td class="num">5.03%</td><td class="num">5.76%</td><td class="num">10.79%</td><td class="num tag">10.47%</td><td class="num">8.50%</td></tr>
+        <tr><td>Month 4</td><td class="num">7,000,000</td><td class="num">5.03%</td><td class="num">4.11%</td><td class="num">9.14%</td><td class="num tag">8.87%</td><td class="num">8.50%</td></tr>
+        <tr><td>Month 5</td><td class="num">8,000,000</td><td class="num">5.03%</td><td class="num">3.60%</td><td class="num">8.63%</td><td class="num tag">8.37%</td><td class="num">8.50%</td></tr>
+        <tr><td>Month 6</td><td class="num">10,000,000</td><td class="num">5.03%</td><td class="num">2.40%</td><td class="num">7.43%</td><td class="num tag">7.21%</td><td class="num">8.50%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ================= PARAMETERS ================= -->
+<section class="block wrap" id="parameters">
+  <div class="section-head">
+    <div>
+      <div class="section-num">§5</div>
+      <h2 class="h">Vault Parameters</h2>
+    </div>
+  </div>
+  <div class="table-wrap scroll">
+    <table class="ledger">
+      <tbody>
+        <tr><td>Vault token name</td><td>SharpByte Pharos Prime</td></tr>
+        <tr><td>Vault maturity</td><td>None — open-ended</td></tr>
+        <tr><td>Rate mechanism</td><td>TermMax Vault Range Order</td></tr>
+        <tr><td>TermMax Lender Fee</td><td>2% of interest income</td></tr>
+        <tr><td>TermMax Borrow Fee</td><td>13% of interest (charged to borrower)</td></tr>
+        <tr><td>Performance Fee (Curator)</td><td>10% of gross lender yield (after Lender Fee) — TermMax as Curator</td></tr>
+        <tr><td>Protocol fee</td><td>None</td></tr>
+        <tr><td>Early exit penalty</td><td>None — instant liquidity not guaranteed beyond 5% reserve</td></tr>
+        <tr><td>Incentive mechanism</td><td>Merkl Token Holding Campaign — SharpByte Pharos Prime holders earn $TMX + $PROS pro-rata by deposit × time</td></tr>
+        <tr><td>Incentive model</td><td>Dilution — fixed pool ($135,800 net), APY inversely proportional to TVL</td></tr>
+        <tr><td>Distribution timing</td><td>Single payout at end of 6-month campaign (Month 6 close)</td></tr>
+        <tr><td>$TMX / $PROS valuation</td><td>$TMX: $60M valuation · $PROS: 30-day TWAP</td></tr>
+        <tr><td>Incentive split</td><td>50% TermMax ($TMX) + 50% Pharos ($PROS)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="lead" style="margin-top:16px;">Note: the Vault Summary (§1) states a 3-month campaign duration, while Distribution Timing above references a 6-month campaign close — both are carried as stated in the source proposal and should be reconciled before publishing a final term sheet.</p>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="wrap">
+  <div class="parties">
+    <div class="party">
+      <h4>TermMax</h4>
+      <p>Vault operator and Curator of Market A (USDC/APC). Manages the Range Order rate mechanism, lender fee, and performance fee on gross lender yield.</p>
+    </div>
+    <div class="party">
+      <h4>SharpByte</h4>
+      <p>Curator of Market B (USDC/pALPHA) and overall vault curator. Administers the $PROS Merkl incentive campaign and step-wise reward disbursement.</p>
+    </div>
+    <div class="party">
+      <h4>Pharos Network</h4>
+      <p>Host network for SharpByte Pharos Prime and underlying markets. Co-funds the incentive campaign via $PROS, matched by TermMax's $TMX allocation.</p>
+    </div>
+  </div>
+  <div class="disclaimer">
+    <strong>Disclaimer —</strong> This document does not constitute a binding commitment.
+    Figures shown (APYs, TVL glidepaths, campaign costs) are illustrative projections based on modeled assumptions and are
+    subject to change. Nothing herein constitutes investment, legal, or tax advice.
+  </div>
+</footer>
+
+<script>
+  function showFlow(which){
+    document.querySelectorAll('.flow-panel').forEach(function(el){ el.classList.remove('active'); });
+    document.querySelectorAll('.flow-tab').forEach(function(el){ el.classList.remove('active'); });
+    document.getElementById('flow-' + which).classList.add('active');
+    event.currentTarget.classList.add('active');
+  }
+</script>
+
+</body>
+</html>
